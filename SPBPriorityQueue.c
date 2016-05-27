@@ -16,7 +16,7 @@ SPBPQueue spBPQueueCreate(int maxSize)		// TODO Paz 1
 	{
 		return NULL;
 	}
-	SPBPQueue newQueue = (SPBPQueue)(sizeof(struct sp_bp_queue_t));
+	SPBPQueue newQueue = (SPBPQueue)malloc(sizeof(struct sp_bp_queue_t));
 	if (newQueue == NULL)		// allocation failure
 	{
 		return NULL;
@@ -42,7 +42,9 @@ SPBPQueue spBPQueueCopy(SPBPQueue source)		// TODO Paz 2
 	{
 		return NULL;
 	}
-	SPBPQueue copyQueue = spBPQueueCreate(source.maxSize);		// TODO not sure if should do malloc and
+	SPBPQueue copyQueue;
+	copyQueue = spBPQueueCreate(source->maxSize);
+	// TODO not sure if should do malloc and
 																// on which size (of list)
 	if (copyQueue == NULL)		// allocation failure
 	{

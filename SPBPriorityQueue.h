@@ -40,8 +40,16 @@ typedef enum sp_bp_queue_msg_t {
 SPBPQueue spBPQueueCreate(int maxSize);
 
 /**
- * TODO Complete documentation
+ * Creates a copy of target bpqueue.
+ *
+ * The new copy will contain all the elements from the source queue
+ *
+ * @param source The target queue to copy
+ * @return
+ * NULL if a NULL was sent or a memory allocation failed.
+ * A new queue containing the same elements otherwise.
  */
+
 SPBPQueue spBPQueueCopy(SPBPQueue source);
 
 /**

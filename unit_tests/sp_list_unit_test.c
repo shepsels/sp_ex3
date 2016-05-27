@@ -343,24 +343,24 @@ static bool testListDestroy() {
 	return true;
 }
 
-int main() {
-	RUN_TEST(testElementCreate);
-	RUN_TEST(testElementCopy);
-	RUN_TEST(testElementCompare);
-	RUN_TEST(testElementGetIndex);
-	RUN_TEST(testIsElementGetValue);
-	RUN_TEST(testElementSetIndex);
-	RUN_TEST(testElementSetValue);
-	RUN_TEST(testListCreate);
-	RUN_TEST(testListCopy);
-	RUN_TEST(testListGetSize);
-	RUN_TEST(testListGetFirst);
-	RUN_TEST(testListGetNext);
-	RUN_TEST(testListInsertFirst);
-	RUN_TEST(testListInsertLast);
-	RUN_TEST(testListInsertBeforeCurrent);
-	RUN_TEST(testListInsertAfterCurrent);
-	RUN_TEST(testListClear);
-	RUN_TEST(testListDestroy);
-	return 0;
-}
+//int main() {
+//	RUN_TEST(testElementCreate);
+//	RUN_TEST(testElementCopy);
+//	RUN_TEST(testElementCompare);
+//	RUN_TEST(testElementGetIndex);
+//	RUN_TEST(testIsElementGetValue);
+//	RUN_TEST(testElementSetIndex);
+//	RUN_TEST(testElementSetValue);
+//	RUN_TEST(testListCreate);
+//	RUN_TEST(testListCopy);
+//	RUN_TEST(testListGetSize);
+//	RUN_TEST(testListGetFirst);
+//	RUN_TEST(testListGetNext);
+//	RUN_TEST(testListInsertFirst);
+//	RUN_TEST(testListInsertLast);
+//	RUN_TEST(testListInsertBeforeCurrent);
+//	RUN_TEST(testListInsertAfterCurrent);
+//	RUN_TEST(testListClear);
+//	RUN_TEST(testListDestroy);
+//	return 0;
+//}
