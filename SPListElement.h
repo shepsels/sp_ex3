@@ -36,6 +36,13 @@ typedef enum SP_LIST_ELEMENT_RESULT_t {
 /** Type used represent an element in the list **/
 typedef struct sp_list_element_t * SPListElement;
 
+//TODO taken from splistelement.c. should check what to do
+struct sp_list_element_t {
+	int index;
+	double value;
+};
+
+
 /**
  * Creates a new element with the specific index and value.
  *

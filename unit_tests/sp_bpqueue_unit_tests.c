@@ -28,8 +28,17 @@ bool queueCreateTest() {
 	return true;
 }
 
+static bool testQueueDestroy() {		//TODO test fails. should check if ok or if destroy not removing all
+	SPBPQueue q = spBPQueueCreate(4);
+	spBPQueueDestroy(q);
+	ASSERT_TRUE(q == NULL);
+	return true;
+}
+
 
 int main() {
 	RUN_TEST(queueCreateTest);
+	RUN_TEST(testQueueDestroy);
+
 }
 

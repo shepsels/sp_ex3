@@ -3,11 +3,9 @@
 #include <string.h>
 #include <assert.h>
 
-struct sp_list_element_t {
-	int index;
-	double value;
-};
 
+
+//TODO struct should be here
 SPListElement spListElementCreate(int index, double value) {
 	SPListElement temp = NULL;
 	if(index < 0 || value <0.0){

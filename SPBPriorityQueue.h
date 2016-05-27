@@ -53,22 +53,39 @@ SPBPQueue spBPQueueCreate(int maxSize);
 SPBPQueue spBPQueueCopy(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * QueueDestroy: Deallocates an existing queue. Clears all elements by using the
+ * list functions.
+ *
+ * @param Target quque to be deallocated. If list is NULL nothing will be
+ * done since it's using listDestroy
  */
 void spBPQueueDestroy(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * Removes all elements from target queue.
+ *
+ * The elements are deallocated using the clear function of SPList
+ * @param Target queue to remove all elements from
+ * @return
  */
 void spBPQueueClear(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * Returns the number of elements in the queue.
+ *
+ * @param Target queue which size is requested.
+ * @return
+ * -1 if a NULL pointer was sent.
+ * Otherwise the number of elements in the queue.
  */
 int spBPQueueSize(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * Retruns the maximum capacity allowed in the queue.
+ *
+ * @param the queue
+ * @return
+ * the maxSize of the queue
  */
 int spBPQueueGetMaxSize(SPBPQueue source);
 
