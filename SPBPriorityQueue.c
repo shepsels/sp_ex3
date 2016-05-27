@@ -81,9 +81,11 @@ int spBPQueueGetMaxSize(SPBPQueue source)		// TODO Paz 6
 	return source->maxSize;
 }
 
-SP_BPQUEUE_MSG spBPQueueEnqueue(SPBPQueue source, SPListElement element)
+SP_BPQUEUE_MSG spBPQueueEnqueue(SPBPQueue source, SPListElement element)	//TODO Paz 7
 {
 	int cnt=0;
+	bool alreadyAdded = false;
+	SP_LIST_MSG m = SP_BPQUEUE_INVALID_ARGUMENT;	// TODO temp init
 	int listSize = spBPQueueSize(source);
 	if (source == NULL || element == NULL)			// one of the arguments is invalid
 	{
@@ -93,53 +95,60 @@ SP_BPQUEUE_MSG spBPQueueEnqueue(SPBPQueue source, SPListElement element)
 	bool isFull = (source->maxSize == listSize);	// the queue is at its max capacity
 	if (spListGetSize(list) == 0)					// queue is empty
 	{
-		spListInsertFirst(list, element);
+		SP_LIST_MSG m = spListInsertFirst(list, element);
+		if (m == SP_LIST_OUT_OF_MEMORY){
+				return SP_BPQUEUE_OUT_OF_MEMORY;
+			}
+		if (m == SP_LIST_SUCCESS){
+			return SP_BPQUEUE_SUCCESS;
+		}
 	}
 	// while loop to find the correct place to insert the node, until one before last element
 	SPListElement curr = spListGetFirst(list);
-	while ((curr->value < element->value) || (cnt < listSize))
+	if (!isFull)
 	{
-		curr = spListGetNext(list);
-		cnt++;
-	}
-	if((! isFull) && curr->value >= element->value)					// list is not full, can add
-	{
-		SP_LIST_MSG m = spListInsertBeforeCurrent(list, element);
-		if (m == SP_LIST_OUT_OF_MEMORY){
-				return SP_BPQUEUE_OUT_OF_MEMORY;
-			}
-		if (m == SP_LIST_SUCCESS){
-			return SP_BPQUEUE_SUCCESS;
-		}
-	}
-	if ((! isFull) && curr->value < element->value)					// the new one should be the biggest
-	{
-		SP_LIST_MSG m = spListInsertAfterCurrent(list, element);
-		if (m == SP_LIST_OUT_OF_MEMORY){
-				return SP_BPQUEUE_OUT_OF_MEMORY;
-			}
-		if (m == SP_LIST_SUCCESS){
-			return SP_BPQUEUE_SUCCESS;
-		}
-	}
-	if (isFull)														// queue is full
-	{
-		if (curr->value > element->value)				// element shoud replace existing one
+		while(curr != NULL)						// end of the list
 		{
-			SP_LIST_MSG m = spListInsertBeforeCurrent(list, element);
-//			spBPQueueDequeue(curr);				// TODO uncomment when done. dequeue the current element
-			if (m == SP_LIST_OUT_OF_MEMORY){
-				return SP_BPQUEUE_OUT_OF_MEMORY;
+			if (curr->value > element->value) 	// element should be inserted here
+			{
+				m = spListInsertBeforeCurrent(list, element);
+				if (m == SP_LIST_OUT_OF_MEMORY){
+						return SP_BPQUEUE_OUT_OF_MEMORY;
+					}
+				if (m == SP_LIST_SUCCESS){
+					return SP_BPQUEUE_SUCCESS;
 				}
-			if (m == SP_LIST_SUCCESS){
-				return SP_BPQUEUE_SUCCESS;
 			}
-		}
-		else 										// the element is bigger and shouln't replace any
-		{
-			return SP_BPQUEUE_FULL;
+			curr = spListGetNext(list);
 		}
 	}
+	else							//list is full, should run until the end in order to delete
+	{
+		while(curr != NULL)						// end of the list
+		{
+			cnt++;
+			if (curr->value > element->value && alreadyAdded == false) 	// element should be inserted here
+			{
+				m = spListInsertBeforeCurrent(list, element);
+				alreadyAdded = true;
+			}
+			if (cnt == source->maxSize && alreadyAdded)			// that is the last element
+			{
+				spListRemoveCurrent(list);
+				break;
+			}
+			curr = spListGetNext(list);
+		}
+		//end of loop
+
+		if (m == SP_LIST_OUT_OF_MEMORY){
+				return SP_BPQUEUE_OUT_OF_MEMORY;
+			}
+		if (m == SP_LIST_SUCCESS){
+			return SP_BPQUEUE_SUCCESS;
+		}
+	}
+	return SP_BPQUEUE_FULL;
 }
 
 

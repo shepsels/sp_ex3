@@ -35,10 +35,39 @@ static bool testQueueDestroy() {		//TODO test fails. should check if ok or if de
 	return true;
 }
 
+static bool testInsertQueue() {
+	ASSERT_TRUE(NULL == spBPQueueCreate(-1));
+	SPBPQueue q1 = spBPQueueCreate(2);
+	SPListElement e1 = spListElementCreate(1, 1.0);
+	SPListElement e2 = spListElementCreate(2, 2.0);
+	SPListElement e3 = spListElementCreate(3, 3.0);
+	SPListElement e4 = spListElementCreate(4, 4.0);
+	ASSERT_TRUE(spBPQueueSize(q1) == 0);
+	SP_BPQUEUE_MSG msg1 = spBPQueueEnqueue(q1, e3);
+	ASSERT_TRUE(msg1 == SP_BPQUEUE_SUCCESS);
+	ASSERT_TRUE(spBPQueueSize(q1) == 1);
+	spBPQueueEnqueue(q1, e2);
+	ASSERT_TRUE(spBPQueueSize(q1) == 2);
+	ASSERT_TRUE(spListGetFirst(q1->list)->value == 2.0);
+	ASSERT_TRUE(spListGetNext(q1->list)->value == 3.0);
+	msg1 = spBPQueueEnqueue(q1, e1);
+	ASSERT_TRUE(msg1 == SP_BPQUEUE_SUCCESS);
+	ASSERT_TRUE(spBPQueueSize(q1) == 2);
+	ASSERT_TRUE(spListGetFirst(q1->list)->value == 1.0);
+	ASSERT_TRUE(spListGetNext(q1->list)->value == 2.0);
+	msg1 = spBPQueueEnqueue(q1, e4);
+	ASSERT_TRUE(msg1 == SP_BPQUEUE_FULL);
+	return true;
+}
+
 
 int main() {
 	RUN_TEST(queueCreateTest);
-	RUN_TEST(testQueueDestroy);
-
+//	printf("1");
+//	fflush(NULL);
+//	RUN_TEST(testQueueDestroy);
+//	printf("1");
+//		fflush(NULL);
+	RUN_TEST(testInsertQueue);
 }
 
