@@ -27,7 +27,8 @@ SPBPQueue spBPQueueCreate(int maxSize)			// TODO Paz 1
 		free(newQueue);
 		return NULL;
 	}
-	newQueue->list = spListCreate();
+	SPList l = spListCreate();
+	newQueue->list = l;
 	if (newQueue->list == NULL)
 	{
 		free(newQueue);
@@ -44,21 +45,30 @@ SPBPQueue spBPQueueCopy(SPBPQueue source)		// TODO Paz 2
 	}
 	SPBPQueue copyQueue;
 	copyQueue = spBPQueueCreate(source->maxSize);
-	// TODO not sure if should do malloc and
-																// on which size (of list)
 	if (copyQueue == NULL)		// allocation failure
 	{
 		return NULL;
 	}
-	copyQueue->list = spListCopy(source);
+	if(spBPQueueSize(source) > 0)
+	{
+		SPList l = spListCopy(source->list);
+		copyQueue->list = l;
+	}
 	return copyQueue;
 }
 
 void spBPQueueDestroy(SPBPQueue source)			// TODO Paz 3
 {
-	spListClear(source->list);
-	spListDestroy(source->list);
-	free(source);
+	if(source != NULL)
+	{
+		if(spBPQueueSize(source) > 0)
+		{
+			spListClear(source->list);
+			spListDestroy(source->list);
+		}
+
+		free(source);
+	}
 	return;
 }
 

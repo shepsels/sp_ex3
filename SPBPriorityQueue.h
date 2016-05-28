@@ -90,8 +90,16 @@ int spBPQueueSize(SPBPQueue source);
 int spBPQueueGetMaxSize(SPBPQueue source);
 
 /**
- * TODO Complete documentation
- */
+ * Adds a new element to the queue, in order by value.
+ *
+ * @param The designated queue.
+ * @param The element to insert. A copy of the element will be
+ * inserted
+ * @return
+ *	SP_BPQUEUE_OUT_OF_MEMORY - allocation failure
+ *	SP_BPQUEUE_FULL - the queue is full
+ *	SP_BPQUEUE_INVALID_ARGUMENT - one of the arguments isn't correct
+ *	SP_BPQUEUE_SUCCESS - element added successfully */
 SP_BPQUEUE_MSG spBPQueueEnqueue(SPBPQueue source, SPListElement element);
 
 /**
