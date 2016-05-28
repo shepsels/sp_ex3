@@ -54,6 +54,10 @@ static bool testInsertQueue() {			//TODO Paz 3
 	msg1 = spBPQueueEnqueue(q1, e4);
 	ASSERT_TRUE(msg1 == SP_BPQUEUE_FULL);
 	spBPQueueDestroy(q1);
+	spListElementDestroy(e1);
+	spListElementDestroy(e2);
+	spListElementDestroy(e3);
+	spListElementDestroy(e4);
 	return true;
 }
 
@@ -111,6 +115,51 @@ static bool testQueueClear() {			//TODO Paz 5
 }
 
 
+static bool testInsertQueueWithDups() {			//TODO Paz 6
+	SPBPQueue q = spBPQueueCreate(3);
+	SPListElement e1 = spListElementCreate(1, 1.0);
+	SPListElement e2 = spListElementCreate(2, 2.0);
+	SPListElement e3 = spListElementCreate(3, 3.0);
+	SPListElement e2_2 = spListElementCreate(2, 2.0);
+	SPListElement e4 = spListElementCreate(4, 4.0);
+	SPListElement e5 = spListElementCreate(5, 0.5);
+	SPListElement e6 = spListElementCreate(6, 0.5);
+	ASSERT_TRUE(spBPQueueSize(q) == 0);
+	SP_BPQUEUE_MSG msg1 = spBPQueueEnqueue(q, e3);
+	ASSERT_TRUE(msg1 == SP_BPQUEUE_SUCCESS);
+	ASSERT_TRUE(spBPQueueSize(q) == 1);
+	spBPQueueEnqueue(q, e2);
+	ASSERT_TRUE(spBPQueueSize(q) == 2);
+	spBPQueueEnqueue(q, e2_2);
+	ASSERT_TRUE(spBPQueueSize(q) == 3);
+	ASSERT_TRUE(spListGetFirst(q->list)->value == 2.0);
+	ASSERT_TRUE(spListGetNext(q->list)->value == 2.0);
+	ASSERT_TRUE(spListGetNext(q->list)->value == 3.0);
+	msg1 = spBPQueueEnqueue(q, e1);
+	ASSERT_TRUE(msg1 == SP_BPQUEUE_SUCCESS);
+	ASSERT_TRUE(spBPQueueSize(q) == 3);
+	ASSERT_TRUE(spListGetFirst(q->list)->value == 1.0);
+	ASSERT_TRUE(spListGetNext(q->list)->value == 2.0);
+	ASSERT_TRUE(spListGetNext(q->list)->value == 2.0);
+	msg1 = spBPQueueEnqueue(q, e4);
+	ASSERT_TRUE(msg1 == SP_BPQUEUE_FULL);
+	msg1 = spBPQueueEnqueue(q, e5);
+	msg1 = spBPQueueEnqueue(q, e6);
+	ASSERT_TRUE(spListGetFirst(q->list)->value == 0.5);
+	ASSERT_TRUE(spListGetNext(q->list)->value == 0.5);
+	ASSERT_TRUE(spListGetNext(q->list)->value == 1);
+	spBPQueueDestroy(q);
+	spListElementDestroy(e1);
+	spListElementDestroy(e2);
+	spListElementDestroy(e3);
+	spListElementDestroy(e2_2);
+	spListElementDestroy(e4);
+	spListElementDestroy(e5);
+	spListElementDestroy(e6);
+	return true;
+}
+
+
 
 int main() {
 	RUN_TEST(queueCreateTest);
@@ -118,5 +167,6 @@ int main() {
 	RUN_TEST(testInsertQueue);
 	RUN_TEST(testQueueCopy);
 	RUN_TEST(testQueueClear);
+	RUN_TEST(testInsertQueueWithDups);
 }
 

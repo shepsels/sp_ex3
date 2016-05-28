@@ -22,7 +22,7 @@ SPBPQueue spBPQueueCreate(int maxSize)			// TODO Paz 1
 		return NULL;
 	}
 	newQueue->maxSize = maxSize;
-	if (newQueue->maxSize == NULL)
+	if (newQueue->maxSize < 0)
 	{
 		free(newQueue);
 		return NULL;
@@ -44,15 +44,24 @@ SPBPQueue spBPQueueCopy(SPBPQueue source)		// TODO Paz 2
 		return NULL;
 	}
 	SPBPQueue copyQueue;
-	copyQueue = spBPQueueCreate(source->maxSize);
-	if (copyQueue == NULL)		// allocation failure
+
+	if(spBPQueueSize(source) > 0)	// queue isn't empty, should copy all elements
+		{
+			copyQueue = (SPBPQueue)malloc(sizeof(struct sp_bp_queue_t));
+			if (copyQueue == NULL)		// allocation failure
+			{
+				return NULL;
+			}
+			SPList l = spListCopy(source->list);
+			copyQueue->list = l;
+		}
+	else							// original queue is empty
 	{
-		return NULL;
-	}
-	if(spBPQueueSize(source) > 0)
-	{
-		SPList l = spListCopy(source->list);
-		copyQueue->list = l;
+		copyQueue = spBPQueueCreate(source->maxSize);
+		if (copyQueue == NULL)		// allocation failure
+		{
+			return NULL;
+		}
 	}
 	return copyQueue;
 }
@@ -61,12 +70,7 @@ void spBPQueueDestroy(SPBPQueue source)			// TODO Paz 3
 {
 	if(source != NULL)
 	{
-		if(spBPQueueSize(source) > 0)
-		{
-			spListClear(source->list);
-			spListDestroy(source->list);
-		}
-
+		spListDestroy(source->list);
 		free(source);
 	}
 	return;
