@@ -9,14 +9,16 @@
  * TODO Complete documentation
  */
 
+struct sp_bp_queue_t {
+
+	int maxSize;
+	SPList list;
+
+};
 
 /** type used to define Bounded priority queue **/
 typedef struct sp_bp_queue_t* SPBPQueue;
 
-struct sp_bp_queue_t{	//TODO move from here
-	int maxSize;
-	SPList list;
-};
 
 /** type for error reporting **/
 typedef enum sp_bp_queue_msg_t {
@@ -103,37 +105,72 @@ int spBPQueueGetMaxSize(SPBPQueue source);
 SP_BPQUEUE_MSG spBPQueueEnqueue(SPBPQueue source, SPListElement element);
 
 /**
- * TODO Complete documentation
+ * Removes the element of the queue which contains the lowest value
+ *
+ * @param The designated queue
+ * @return
+ *	SP_BPQUEUE_INVALID_ARGUMENT - one of the arguments isn't correct
+ *	SP_BPQUEUE_SUCCESS - element added successfully
  */
 SP_BPQUEUE_MSG spBPQueueDequeue(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * creating and retrieving a new copy of the element with the lowest value
+ *
+ * @param The source queue
+ * @return
+ * NULL if the source queue is invalid
+ * a copy of the first element of the queue otherwise
  */
 SPListElement spBPQueuePeek(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * creating and retrieving a new copy of the element with the highest value
+ *
+ * @param The source queue
+ * @return
+ * NULL if the source queue is invalid
+ * a copy of the last element of the queue otherwise
  */
 SPListElement spBPQueuePeekLast(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * returns the minimum value in the queue
+ *
+ * @param The source queue
+ * @return
+ * -1 if the source queue is invalid
+ * the minimum value in the queue otherwise
  */
 double spBPQueueMinValue(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ *  returns the maximum value in the queue
+ *
+ * @param The source queue
+ * @return
+ * -1 if the source queue is invalid
+ * the maximum value in the queue otherwise
  */
 double spBPQueueMaxValue(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * returns true if the queue is empty
+ *
+ * @param The designated queue
+ * @return
+ * true if the source queue and the list he contains are valid but empty
+ * false otherwise
  */
 bool spBPQueueIsEmpty(SPBPQueue source);
 
 /**
- * TODO Complete documentation
+ * returns true if the queue is full
+ *
+ * @param The designated queue
+ * @return
+ * true if the source queue and the list he contains are valid and the list's size is equal to the maximum size of the queue
+ * false otherwise
  */
 bool spBPQueueIsFull(SPBPQueue source);
 

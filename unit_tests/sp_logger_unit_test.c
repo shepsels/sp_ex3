@@ -99,28 +99,16 @@ static bool basicLoggerInfoTest() {
 }
 
 
-//static bool loggerNoFileTest() {	//todo check how to delete the files
-//	const char* testFile = "abc2.log";
-//	ASSERT_TRUE(spLoggerCreate(testFile,SP_LOGGER_WARNING_ERROR_LEVEL) == SP_LOGGER_SUCCESS);
-//	remove(testFile);
-//	ASSERT_TRUE(spLoggerPrintError("MSGA","sp_logger_unit_test.c",__func__,__LINE__) == SP_LOGGER_WRITE_FAIL);
-//	spLoggerDestroy();
-////	ASSERT_TRUE(identicalFiles(testFile,expectedFile));
-//	return true;
-//
-//}
-
 //int main() {
 //	RUN_TEST(basicLoggerTest);
 //	RUN_TEST(basicLoggerErrorTest);
 //	RUN_TEST(basicLoggerDebugTest);
 //	RUN_TEST(basicLoggerWarningTest);
-////	RUN_TEST(loggerNoFileTest);			//todo not passing, should check how to test writing failure
 //	RUN_TEST(basicLoggerInfoTest);
 //	return 0;
 //}
 //
-
-
+//
+//
 
 

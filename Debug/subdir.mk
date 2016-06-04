@@ -10,6 +10,12 @@ C_SRCS += \
 ../SPLogger.c \
 ../SPPoint.c 
 
+O_SRCS += \
+../SPBPriorityQueue.o \
+../SPList.o \
+../SPListElement.o \
+../sp_bpqueue_unit_test.o 
+
 OBJS += \
 ./SPBPriorityQueue.o \
 ./SPList.o \
