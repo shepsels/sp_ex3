@@ -44,7 +44,7 @@ SPPoint spPointCopy(SPPoint source){
 	SPPoint pointCopy;
 	double* newData;
 
-	pointCopy=(SPPoint)malloc(sizeof(SPPoint));
+	pointCopy=(SPPoint)malloc(sizeof(struct sp_point_t));
 		if(pointCopy == NULL)    //memory allocation failed
 			{
 				free(pointCopy);

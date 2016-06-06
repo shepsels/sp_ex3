@@ -7,7 +7,7 @@
  * SP Bounded Priority Queue summary
  *
  * Implements a limited size queue with value and index.
- * The consists of a list, and its elements are listElements.
+ * The queue consists of a list, and its elements are listElements.
  * the queue is sorted by the value of the elements, and inside it
  * by their index.
  * when adding element to a queue with full capacity:
