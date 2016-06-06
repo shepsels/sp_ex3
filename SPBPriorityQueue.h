@@ -6,7 +6,34 @@
 /**
  * SP Bounded Priority Queue summary
  *
- * TODO Complete documentation
+ * Implements a limited size queue with value and index.
+ * The consists of a list, and its elements are listElements.
+ * the queue is sorted by the value of the elements, and inside it
+ * by their index.
+ * when adding element to a queue with full capacity:
+ * 	if the element has the highest value, it will not be inserted
+ * 	else, the last element of the queue will be removed.
+ *
+ * The following functions are available:
+ * spBPQueueCreate			creates an empty queue
+ * spBPQueueCopy			copy the data of the queue to a new
+ * 							allocated queue
+ * spBPQueueDestroy			destroy an existing queue
+ * spBPQueueClear			remove all elements from the queue and
+ * 							free memory
+ * spBPQueueSize			returns how many elements are in the queue
+ * spBPQueueGetMaxSize		returns the bound size of the queue
+ * spBPQueueEnqueue			insert a new element to the correct place
+ * 							in the queue. remove last element if needed
+ * spBPQueueDequeue			remove the first element of the queue
+ * spBPQueuePeek			copy the first element of the queue
+ * spBPQueuePeekLast		copy the first element of the queue
+ * spBPQueueMinValue		returns the value of the first element in the queue
+ * spBPQueueMaxValue		returns the value of the last element in the queue
+ * spBPQueueIsEmpty			true if the queue is empty. otherwise false
+ * spBPQueueIsFull			true if the queue is full. otherwise false
+ * getLastElement			returns the last element in the queue
+ *
  */
 
 struct sp_bp_queue_t {
@@ -119,7 +146,7 @@ SP_BPQUEUE_MSG spBPQueueDequeue(SPBPQueue source);
  *
  * @param The source queue
  * @return
- * NULL if the source queue is invalid
+ * NULL if the source queue or the source list is invalid
  * a copy of the first element of the queue otherwise
  */
 SPListElement spBPQueuePeek(SPBPQueue source);
@@ -129,7 +156,7 @@ SPListElement spBPQueuePeek(SPBPQueue source);
  *
  * @param The source queue
  * @return
- * NULL if the source queue is invalid
+ * NULL if the source queue or the source list is invalid
  * a copy of the last element of the queue otherwise
  */
 SPListElement spBPQueuePeekLast(SPBPQueue source);
@@ -139,7 +166,7 @@ SPListElement spBPQueuePeekLast(SPBPQueue source);
  *
  * @param The source queue
  * @return
- * -1 if the source queue is invalid
+ * -1 if the source queue or the source list is invalid
  * the minimum value in the queue otherwise
  */
 double spBPQueueMinValue(SPBPQueue source);
@@ -149,7 +176,7 @@ double spBPQueueMinValue(SPBPQueue source);
  *
  * @param The source queue
  * @return
- * -1 if the source queue is invalid
+ * -1 if the source queue or the source list is invalid
  * the maximum value in the queue otherwise
  */
 double spBPQueueMaxValue(SPBPQueue source);
@@ -173,5 +200,14 @@ bool spBPQueueIsEmpty(SPBPQueue source);
  * false otherwise
  */
 bool spBPQueueIsFull(SPBPQueue source);
+
+/**
+ * find and returns the last element of the queue (the item with the highest value)
+ *
+ * @param The source queue
+ * @return
+ * the last element of the source queue
+ */
+SPListElement getLastElement(SPBPQueue source);
 
 #endif

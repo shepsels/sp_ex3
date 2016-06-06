@@ -99,16 +99,16 @@ static bool basicLoggerInfoTest() {
 }
 
 
-//int main() {
-//	RUN_TEST(basicLoggerTest);
-//	RUN_TEST(basicLoggerErrorTest);
-//	RUN_TEST(basicLoggerDebugTest);
-//	RUN_TEST(basicLoggerWarningTest);
-//	RUN_TEST(basicLoggerInfoTest);
-//	return 0;
-//}
-//
-//
-//
+int main() {
+	RUN_TEST(basicLoggerTest);
+	RUN_TEST(basicLoggerErrorTest);
+	RUN_TEST(basicLoggerDebugTest);
+	RUN_TEST(basicLoggerWarningTest);
+	RUN_TEST(basicLoggerInfoTest);
+	return 0;
+}
+
+
+
 
 

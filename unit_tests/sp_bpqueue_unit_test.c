@@ -1,12 +1,12 @@
 /*
- * sp_bpqueue_unit_tests.c
+ * sp_bpqueue_unit_test.c
  *
- *  Created on: May 26, 2016
- *      Author: pshepsels
+ *  Created on: 29 áîàé 2016
+ *      Author: Noa
  */
+
+
 #include "unit_test_util.h"
-//#include "../SPListElement.h"
-//#include "../SPList.h"
 #include "../SPBPriorityQueue.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -14,25 +14,22 @@
 #include <stdarg.h>
 #include <assert.h>
 
+
 /**
- * create queue with maximum capacity of 3
- * check if its created
- * validate max size and list size
+ * creates queue with maximum capacity of 3
+ * checks if it's created
+ * validates max size and list size
  */
 bool queueCreateTest() {
 	int maxSize = 3;
 	SPBPQueue q = spBPQueueCreate(maxSize);
-	ASSERT_TRUE(q!=NULL);
-	ASSERT_TRUE(spBPQueueGetMaxSize(q) == maxSize);
-	ASSERT_TRUE(q->list != NULL);
-	ASSERT_TRUE(spListGetSize(q->list) == 0);
+	ASSERT_TRUE(q != NULL);
 	spBPQueueDestroy(q);
-
 	return true;
 }
 
 /**
- * check destroy can run on null
+ * checks if destroy can run on null
  */
 static bool queueDestroyTest() {
 	spBPQueueDestroy(NULL);
@@ -40,11 +37,11 @@ static bool queueDestroyTest() {
 }
 
 /**
- * create queue with maximun capacity of 2
- * validate that queue is empty
- * insert 3,3.0 and make sure it was successfully added
- * insert 2,2.0 and make sure it was successfully added
- * try to insert bigger element and queue is full
+ * creates queue with maximun capacity of 2
+ * validates that queue is empty
+ * inserts 3,3.0 and makes sure it was successfully added
+ * inserts 2,2.0 and makes sure it was successfully added
+ * tries to insert bigger element and queue is full
  *
  */
 static bool insertQueueTest() {
@@ -107,12 +104,12 @@ static bool insertQueueTest() {
 }
 
 /**
- * create queue with maximun capacity of 2
- * make a copy of the empty queue
- * insert to the original queue
- * validate that the copy didn't change
- * make another copy of non empty queue
- * validate it has same elements
+ * creates queue with maximun capacity of 2
+ * makes a copy of the empty queue
+ * inserts to the original queue
+ * validates that the copy didn't change
+ * makes another copy of non empty queue
+ * validates it has same elements
  */
 static bool queueCopyTest() {
 	SPBPQueue q, copy, copy2;
@@ -159,12 +156,12 @@ static bool queueCopyTest() {
 }
 
 /**
- * create a queue with maximun capacity of 3
- * insert 4 elements and make sure it has 3
- * clear the queue
- * make sure its not null, and it has no elements
- * create another empty queue
- * try to clear and make sure there are no changes
+ * creates a queue with maximun capacity of 3
+ * inserts 4 elements and make sure it has 3
+ * clears the queue
+ * makes sure its not null, and it has no elements
+ * creates another empty queue
+ * tries to clear and make sure there are no changes
  */
 static bool queueClearTest() {
 	SPListElement e1 = spListElementCreate(1, 1.0);
@@ -199,14 +196,14 @@ static bool queueClearTest() {
 }
 
 /**
- * create queue with maximun capacity of 3
- * insert element 3, 3.0 and validate size
- * insert element 2, 2.0 and validate size
- * insert another element 2, 2.0
- * make sure the elements in queue are 2.0, 2.0, 3.0
- * insert elemet 1, 1.0
- * insert 2 elements: 5, 0.5, 6, 0.5
- * make sure they inserted in the correct order
+ * creates queue with maximum capacity of 3
+ * inserts element 3, 3.0 and validate size
+ * inserts element 2, 2.0 and validate size
+ * inserts another element 2, 2.0
+ * makes sure the elements in queue are 2.0, 2.0, 3.0
+ * inserts element 1, 1.0
+ * inserts 2 elements: 5, 0.5, 6, 0.5
+ * makes sure they inserted in the correct order
  */
 static bool insertQueueWithDuplicatesTest() {
 //	SPListElement temp1, temp2, temp3;
@@ -301,68 +298,54 @@ static bool insertQueueWithDuplicatesTest() {
 	return true;
 }
 
-
-static bool dequeueTest(){    //TODO noa 8
+/**
+ * creates queue with maximum capacity of 3
+ * inserts 3 elements with different values
+ * dequeues them one at a time
+ * in each dequeue checks that the correct element is out of the queue and that the size is correct
+ * checks that the message the dequeue function returns is correct
+ */
+static bool dequeueTest(){
 	SP_BPQUEUE_MSG msg;
-	SPBPQueue q = (SPBPQueue)spBPQueueCreate(3);
-	SPListElement e1 =(SPListElement) spListElementCreate(1, 1.0);
-	SPListElement e2 = (SPListElement)spListElementCreate(2, 2.0);
-	SPListElement e3 = (SPListElement)spListElementCreate(3, 3.0);
-	SPListElement e4 = (SPListElement)spListElementCreate(4, 4.0);
-	SPListElement e5 = (SPListElement)spListElementCreate(5, 0.5);
-	SPListElement e6 = (SPListElement)spListElementCreate(6, 0.5);
+	SPBPQueue q ;
+	SPListElement e1,e2,e3,e4;
 
-	msg=spBPQueueEnqueue(q, e2);  //value 2.0
-	ASSERT_TRUE(msg == SP_BPQUEUE_SUCCESS);
-	spBPQueueEnqueue(q, e3);  //value 3.0
-	spBPQueueEnqueue(q, e5);  //value 0.5
-	// q = {e5,e2,e3}
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 0.5);
-	printf("%d",spListGetSize(q->list)); //TODO
-	fflush(NULL);
-	ASSERT_TRUE(spListGetSize(q->list)==3);
-	spBPQueueDequeue(q);
-//	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 2.0);
-	ASSERT_TRUE(spListGetFirst(q->list)->value == 2.0);
-	ASSERT_TRUE(spListGetNext(q->list)->value == 3.0);	//TODO Paz: I changed these 2 lines, its ok like this
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetFirst(q->list))) == 3.0);
-	ASSERT_TRUE(spListGetSize(q->list)==2);
-	spBPQueueDequeue(q);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 3.0);
-	ASSERT_TRUE(spListGetSize(q->list)==1);
-	spBPQueueDequeue(q);
-	ASSERT_TRUE(spListGetFirst(q->list) == NULL);
-	ASSERT_TRUE(spListGetSize(q->list)==0);
+	q = spBPQueueCreate(3);
+	e1 = spListElementCreate(2, 2.0);
+	e2 = spListElementCreate(3, 3.0);
+	e3 = spListElementCreate(5, 0.5);
 
-	spBPQueueEnqueue(q, e4);  //value 4.0
-	spBPQueueEnqueue(q, e6);  //value 0.5
-	spBPQueueEnqueue(q, e1);  //value 1.0
-	// q = {e6,e1,e4}
-	spBPQueueDequeue(q);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 1.0);
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetFirst(q->list))) == 4.0);
-	ASSERT_TRUE(spListGetNext(q->list)->value == 4.0);	// TODO Paz also here I changed the line above
-	ASSERT_TRUE(spListGetSize(q->list)==2);
-	spBPQueueDequeue(q);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 4.0);
-	ASSERT_TRUE(spListGetSize(q->list)==1);
-	spBPQueueEnqueue(q, e2);  //value 2.0
-	// q = {e2,e4}
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 2.0);
-	spBPQueueDequeue(q);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 4.0);
-	ASSERT_TRUE(spListGetSize(q->list)==1);
-	spBPQueueDequeue(q);
-	ASSERT_TRUE(spListGetFirst(q->list) == NULL);
-	ASSERT_TRUE(spListGetSize(q->list)==0);
+	spBPQueueEnqueue(q, e1);  //value 2.0
+	spBPQueueEnqueue(q, e2);  //value 3.0
+	spBPQueueEnqueue(q, e3);  //value 0.5
 
-	//message tests
-//	msg=spBPQueueDequeue(NULL);
-//	ASSERT_TRUE(msg == SP_BPQUEUE_INVALID_ARGUMENT);
-//	q->list=NULL;
-//	msg=spBPQueueDequeue(q);
-//	ASSERT_TRUE(msg == SP_BPQUEUE_INVALID_ARGUMENT);
+	// q = {e2,e1,e2}
 
+	e4=spBPQueuePeek(q);
+	ASSERT_TRUE(spListElementGetValue(e4) == 0.5);
+	ASSERT_TRUE(spBPQueueSize(q)==3);
+	msg=spBPQueueDequeue(q);
+	ASSERT_TRUE(msg==SP_BPQUEUE_SUCCESS); //message test
+	spListElementDestroy(e4);
+
+	e4=spBPQueuePeek(q);
+	ASSERT_TRUE(spListElementGetValue(e4) == 2.0);
+	spListElementDestroy(e4);
+	e4=spBPQueuePeekLast(q);
+	ASSERT_TRUE(spListElementGetValue(e4) == 3.0);
+	ASSERT_TRUE(spBPQueueSize(q)==2);
+	spBPQueueDequeue(q);
+	spListElementDestroy(e4);
+
+	e4=spBPQueuePeek(q);
+	ASSERT_TRUE(spListElementGetValue(e4) == 3.0);
+	ASSERT_TRUE(spBPQueueSize(q)==1);
+	spListElementDestroy(e4);
+
+	spBPQueueDequeue(q);
+	e4=spBPQueuePeek(q);
+	ASSERT_TRUE(e4 == NULL);
+	ASSERT_TRUE(spBPQueueSize(q)==0);
 
 	// memory free
 	spBPQueueDestroy(q);
@@ -370,49 +353,65 @@ static bool dequeueTest(){    //TODO noa 8
 	spListElementDestroy(e2);
 	spListElementDestroy(e3);
 	spListElementDestroy(e4);
-	spListElementDestroy(e5);
-	spListElementDestroy(e6);
 	return true;
 }
 
-static bool spBPQueuePeekTest(){ //TODO noa 9
-	SPBPQueue q = (SPBPQueue)spBPQueueCreate(3);
-//	SPListElement e1 =(SPListElement) spListElementCreate(1, 1.0);
-	SPListElement e1 = (SPListElement)spListElementCreate(2, 2.0);
-	SPListElement e2 = (SPListElement)spListElementCreate(3, 3.0);
-//	SPListElement e4 = (SPListElement)spListElementCreate(4, 4.0);
-	SPListElement e3 = (SPListElement)spListElementCreate(5, 0.5);
-//	SPListElement e6 = (SPListElement)spListElementCreate(6, 0.5);
+/**
+ * creates queue with maximum capacity of 3
+ * inserts 3 elements with different values
+ * checks that the spBPQueuePeek function creates a copy of the first element of the queue
+ * (the one with the smallest value)and that the size of the queue didn't change
+ * dequeues them until the list is empty and checks that spBPQueuePeek returns NULL
+ */
+static bool spBPQueuePeekTest(){
+	SPBPQueue q ;
+	SPListElement e1,e2,e3,e4;
+
+	q = spBPQueueCreate(3);
+	e1 =spListElementCreate(2, 2.0);
+	e2 =spListElementCreate(3, 3.0);
+	e3 =spListElementCreate(5, 0.5);
 
 	spBPQueueEnqueue(q, e1);  //value 2.0
 	spBPQueueEnqueue(q, e2);  //value 3.0
 	spBPQueueEnqueue(q, e3);  //value 0.5
 	// q = {e3,e1,e2}
-	SPListElement e4=(SPListElement)spBPQueuePeek(q);  //copy of e3
+
+	e4=spBPQueuePeek(q);  //copy of e3
 	ASSERT_TRUE(spListElementGetValue(e4)==0.5);
 	ASSERT_TRUE(spListElementGetIndex(e4)==5);
-	ASSERT_TRUE(spListGetSize(q->list)==3);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 0.5);
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetFirst(q->list))) == 2.0);
-	ASSERT_TRUE(spListGetNext(q->list)->value == 2.0);
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetNext(spListGetFirst(q->list)))) == 3.0); TODO paz also here
-	ASSERT_TRUE(spListGetNext(q->list)->value == 3.0);
+	ASSERT_TRUE(spBPQueueSize(q)==3);
+
 	ASSERT_TRUE(spListElementCompare(e3, e4) == 0);
-	spListElementSetValue(e4,8.0);  //changing the copy value in order to check that it is a copy
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetNext(spListGetFirst(q->list)))) == 3.0);
-	spListGetFirst(q->list);
-	spListGetNext(q->list);
-	ASSERT_TRUE(spListGetNext(q->list)->value == 3.0);
-//	ASSERT_TRUE(spListElementGetValue(e3)==3.0);		//TODO Paz: why it should be 3?
+	spListElementSetValue(e4,8.0);  //changing the copy's value in order to check that it is a copy
+	ASSERT_TRUE(spListElementGetValue(e3)==0.5);
 	ASSERT_TRUE(spListElementGetValue(e4)==8.0);
 	ASSERT_TRUE(spListElementCompare(e3, e4) != 0);
+	spListElementDestroy(e4);
 	spBPQueueDequeue(q);
 	// q = {e1,e2}
-	SPListElement e5=(SPListElement)spBPQueuePeek(q);  //copy of e1
-	ASSERT_TRUE(spListElementGetValue(e5)==2.0);
-	ASSERT_TRUE(spListElementGetIndex(e5)==2);
-	ASSERT_TRUE(spListGetSize(q->list)==2);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 2.0);
+
+	e4=spBPQueuePeek(q);  //copy of e1
+	ASSERT_TRUE(spListElementGetValue(e4)==2.0);
+	ASSERT_TRUE(spListElementGetIndex(e4)==2);
+	ASSERT_TRUE(spBPQueueSize(q)==2);
+	ASSERT_TRUE(spListElementCompare(e1, e4) == 0);
+	spListElementDestroy(e4);
+	spBPQueueDequeue(q);
+	// q = {e2}
+
+	e4=spBPQueuePeek(q);  //copy of e2
+	ASSERT_TRUE(spListElementGetValue(e4)==3.0);
+	ASSERT_TRUE(spListElementGetIndex(e4)==3);
+	ASSERT_TRUE(spBPQueueSize(q)==1);
+	ASSERT_TRUE(spListElementCompare(e2, e4) == 0);
+	spListElementDestroy(e4);
+	spBPQueueDequeue(q);
+	// q = {}
+
+	e4=spBPQueuePeek(q);  //NULL
+	ASSERT_TRUE(e4==NULL);
+
 
 	// memory free
 	spBPQueueDestroy(q);
@@ -420,54 +419,70 @@ static bool spBPQueuePeekTest(){ //TODO noa 9
 	spListElementDestroy(e2);
 	spListElementDestroy(e3);
 	spListElementDestroy(e4);
-	spListElementDestroy(e5);
+
 	return true;
 }
 
-static bool spBPQueuePeekLastTest(){  //TODO noa 10
-	SPBPQueue q = (SPBPQueue)spBPQueueCreate(3);
-	SPListElement e1 =(SPListElement) spListElementCreate(1, 1.0);
-	SPListElement e2 = (SPListElement)spListElementCreate(2, 2.0);
-	SPListElement e3 = (SPListElement)spListElementCreate(3, 3.0);
+/**
+ * creates queue with maximum capacity of 3
+ * inserts 3 elements with different values
+ * checks that the spBPQueuePeekLast function creates a copy of the last element of the queue
+ * (the one with the highest value)and that the size of the queue didn't change
+ * dequeues them until the list is empty and checks that spBPQueuePeekLast returns NULL
+ */
+static bool spBPQueuePeekLastTest(){
+	SPBPQueue q ;
+	SPListElement e1,e2,e3,e4,e5;
+
+	q = spBPQueueCreate(3);
+	e1 =spListElementCreate(1, 1.0);
+	e2 =spListElementCreate(2, 2.0);
+	e3 =spListElementCreate(3, 3.0);
 
 	spBPQueueEnqueue(q, e1);  //value 1.0
 	spBPQueueEnqueue(q, e2);  //value 2.0
 	spBPQueueEnqueue(q, e3);  //value 3.0
 	// q = {e1,e2,e3}
-	SPListElement e4 = spBPQueuePeek(q);  //copy of e3
-	ASSERT_TRUE(spListElementGetValue(e4)==1.0);		//TODO Paz: changed it from 3 to 1. its the first
-	ASSERT_TRUE(spListElementGetIndex(e4)==1);			//TODO also here
-	ASSERT_TRUE(spListGetSize(q->list)==3);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 1.0);
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetFirst(q->list))) == 2.0);
-	spListGetFirst(q->list);	//TODO Paz: changed the line above to these lines
-	ASSERT_TRUE(spListGetNext(q->list)->value == 2.0);
 
+	e4 = spBPQueuePeekLast(q);  //copy of e3
+	ASSERT_TRUE(spListElementGetValue(e4)==3.0);
+	ASSERT_TRUE(spListElementGetIndex(e4)==3);
+	ASSERT_TRUE(spBPQueueSize(q)==3);
 
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetNext(spListGetFirst(q->list)))) == 3.0);
-	spListGetFirst(q->list);	//TODO Paz: changed the line above to these lines
-	spListGetNext(q->list);
-	ASSERT_TRUE(spListGetNext(q->list)->value == 3.0);
-//	ASSERT_TRUE(spListElementCompare(e3, e4) == 0);		//TODO Paz should be the opposite
+	ASSERT_TRUE(spListElementCompare(e3, e4) == 0);
 	spListElementSetValue(e4,8.0);  //changing the copy value in order to check that it is a copy
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetNext(spListGetFirst(q->list)))) == 3.0);
-	spListGetFirst(q->list);	//TODO Paz: changed the line above to these lines
-	spListGetNext(q->list);
-	ASSERT_TRUE(spListGetNext(q->list)->value == 3.0);
 	ASSERT_TRUE(spListElementGetValue(e4)==8.0);
 	ASSERT_TRUE(spListElementGetIndex(e3)==3.0);
-
+	ASSERT_TRUE(spListElementCompare(e1, e4) != 0);
+	spListElementDestroy(e4);
 	spBPQueueDequeue(q);
-	// q = {e1,e2}
-	SPListElement e5=(SPListElement)spBPQueuePeek(q);  //copy of e2
-	ASSERT_TRUE(spListElementGetValue(e5)==2.0);
-	ASSERT_TRUE(spListElementGetIndex(e5)==2);
-	ASSERT_TRUE(spListGetSize(q->list)==2);
-//	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 1.0);
-//	ASSERT_TRUE(spListGetFirst(q->list)->value == 1.0);//TODO Paz: commented this line. not sure what is this
-//	ASSERT_TRUE(spListElementGetValue(spListGetNext(spListGetFirst(q->list))) == 2.0);
-	spListGetFirst(q->list);	//TODO Paz: changed the line above to these lines
-	ASSERT_TRUE(spListGetNext(q->list)->value == 3.0);
+	// q = {e2,e3}
+
+	//checking that the order of the queue is correct
+	e4=spBPQueuePeek(q);  //copy of e2
+	ASSERT_TRUE(spListElementGetValue(e4)==2.0);
+	ASSERT_TRUE(spListElementGetIndex(e4)==2);
+	ASSERT_TRUE(spBPQueueSize(q)==2);
+	spListElementDestroy(e4);
+
+	e4 = spBPQueuePeekLast(q);  //copy of e3
+	ASSERT_TRUE(spListElementGetValue(e4)==3.0);
+	ASSERT_TRUE(spListElementGetIndex(e4)==3);
+	ASSERT_TRUE(spBPQueueSize(q)==2);
+	spListElementDestroy(e4);
+	spBPQueueDequeue(q);
+	// q = {e3}
+
+	e5=spBPQueuePeek(q);  //copy of e3
+	e4 = spBPQueuePeekLast(q);  //copy of e3
+	ASSERT_TRUE(spListElementCompare(e5, e4) == 0);
+	ASSERT_TRUE(spBPQueueSize(q)==1);
+	spListElementDestroy(e5);
+	spBPQueueDequeue(q);
+	//q = {}
+
+	e5=spBPQueuePeekLast(q); //NULL
+	ASSERT_TRUE(e5==NULL);
 
 	// memory free
 	spBPQueueDestroy(q);
@@ -479,49 +494,78 @@ static bool spBPQueuePeekLastTest(){  //TODO noa 10
 	return true;
 }
 
-static bool spBPQueueMinValueTest(){   //TODO noa 11
-	SPBPQueue q = (SPBPQueue)spBPQueueCreate(3);
-	SPListElement e1 =(SPListElement) spListElementCreate(1, 1.0);
-	SPListElement e2 = (SPListElement)spListElementCreate(2, 2.0);
-	SPListElement e3 = (SPListElement)spListElementCreate(3, 3.0);
-	SPListElement e4 = (SPListElement)spListElementCreate(4, 0.5);
+/**
+ * creates queue with maximum capacity of 3
+ * inserts 3 elements with different values
+ * checks that the spBPQueueMinValue function returns the value of the first element of the queue
+ * (the lowest one) , changes the first element and re-check
+ */
+static bool spBPQueueMinValueTest(){
+	SPBPQueue q;
+	SPListElement e1,e2,e3,e4,e5;
+
+	q = spBPQueueCreate(3);
+	e1 = spListElementCreate(1, 1.0);
+	e2 = spListElementCreate(2, 2.0);
+	e3 = spListElementCreate(3, 3.0);
+	e4 = spListElementCreate(4, 0.5);
 
 	spBPQueueEnqueue(q, e2);  //value 2.0
 	spBPQueueEnqueue(q, e1);  //value 1.0
 	spBPQueueEnqueue(q, e3);  //value 3.0
 	// q = {e1,e2,e3}
+
 	ASSERT_TRUE(spBPQueueMinValue(q)==1.0);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list)) == 1.0);
+	e5=spBPQueuePeek(q);
+	ASSERT_TRUE(spListElementGetValue(e5) == 1.0);
 	spBPQueueDequeue(q);
 	spBPQueueEnqueue(q, e4);  //value 0.5
+	spListElementDestroy(e5);
 	// q = {e4,e2,e3}
+
 	ASSERT_TRUE(spBPQueueMinValue(q)==0.5);
-	ASSERT_TRUE(spListElementGetValue(spListGetFirst(q->list))== 0.5);
+	e5=spBPQueuePeek(q);
+	ASSERT_TRUE(spListElementGetValue(e5) == 0.5);
+
 	// memory free
 	spBPQueueDestroy(q);
 	spListElementDestroy(e1);
 	spListElementDestroy(e2);
 	spListElementDestroy(e3);
 	spListElementDestroy(e4);
+	spListElementDestroy(e5);
+
 	return true;
 }
 
-static bool spBPQueueMaxValueTest(){  //TODO noa 12
-	SPBPQueue q = (SPBPQueue)spBPQueueCreate(3);
-	SPListElement e1 =(SPListElement) spListElementCreate(1, 1.0);
-	SPListElement e2 = (SPListElement)spListElementCreate(2, 2.0);
-	SPListElement e3 = (SPListElement)spListElementCreate(3, 3.0);
-	SPListElement e4 = (SPListElement)spListElementCreate(4, 4.0);
+/**
+ * creates queue with maximum capacity of 3
+ * inserts 3 elements with different values
+ * checks that the spBPQueueMaxValue function returns the value of the last element of the queue
+ * (the highest one) , inserts element with higher value and re-check
+ */
+static bool spBPQueueMaxValueTest(){
+	SPBPQueue q;
+	SPListElement e1,e2,e3,e4;
+
+	q = spBPQueueCreate(3);
+	e1 = spListElementCreate(1, 1.0);
+	e2 = spListElementCreate(2, 2.0);
+	e3 = spListElementCreate(3, 3.0);
+	e4 = spListElementCreate(4, 4.0);
 
 	spBPQueueEnqueue(q, e2);  //value 2.0
 	spBPQueueEnqueue(q, e1);  //value 1.0
 	spBPQueueEnqueue(q, e3);  //value 3.0
 	// q = {e1,e2,e3}
+
 	ASSERT_TRUE(spBPQueueMaxValue(q)==3.0);
 	spBPQueueDequeue(q);
+
 	ASSERT_TRUE(spBPQueueMaxValue(q)==3.0);
 	spBPQueueEnqueue(q, e4);  //value 4.0
 	// q = {e2,e3,e4}
+
 	ASSERT_TRUE(spBPQueueMaxValue(q)==4.0);
 
 	// memory free
@@ -530,15 +574,28 @@ static bool spBPQueueMaxValueTest(){  //TODO noa 12
 	spListElementDestroy(e2);
 	spListElementDestroy(e3);
 	spListElementDestroy(e4);
+
 	return true;
 }
-static bool spBPQueueIsEmptyTest(){   //TODO noa 13
+
+/**
+ * checks that spBPQueueIsEmpty function returns false for a NULL argument
+ * creates queue with maximum capacity of 3
+ * checks that spBPQueueIsEmpty returns true (the queue is empty when initializing it)
+ * inserts element and checks that spBPQueueIsEmpty returns false
+ * inserts 2 more elements and re-check
+ * clears the queue and re-check
+ */
+static bool spBPQueueIsEmptyTest(){
+	SPBPQueue q;
+	SPListElement e1,e2,e3;
+
 	ASSERT_TRUE(spBPQueueIsEmpty(NULL)==false);
 
-	SPBPQueue q = (SPBPQueue)spBPQueueCreate(3);
-	SPListElement e1 =(SPListElement) spListElementCreate(1, 1.0);
-	SPListElement e2 = (SPListElement)spListElementCreate(2, 2.0);
-	SPListElement e3 = (SPListElement)spListElementCreate(3, 3.0);
+	q = spBPQueueCreate(3);
+	e1 = spListElementCreate(1, 1.0);
+	e2 = spListElementCreate(2, 2.0);
+	e3 = spListElementCreate(3, 3.0);
 
 	ASSERT_TRUE(spBPQueueIsEmpty(q)==true);
 	spBPQueueEnqueue(q, e2);  //value 2.0
@@ -554,16 +611,29 @@ static bool spBPQueueIsEmptyTest(){   //TODO noa 13
 	spListElementDestroy(e1);
 	spListElementDestroy(e2);
 	spListElementDestroy(e3);
+
 	return true;
 }
 
-static bool spBPQueueIsFullTest(){    //TODO noa 14
+/**
+ * checks that spBPQueueIsFull function returns false for a NULL argument
+ * creates queue with maximum capacity of 3
+ * checks that spBPQueueIsFull returns false (the queue is empty when initializing it)
+ * inserts element and checks that spBPQueueIsFull returns false (1 element ,capacity of 3)
+ * inserts 2 more elements and check if it returns true (3 elements ,capacity of 3)
+ * dequeues and inserts the same element and re-check
+ * clears the queue and re-check
+ */
+static bool spBPQueueIsFullTest(){
+	SPBPQueue q;
+	SPListElement e1,e2,e3;
+
 	ASSERT_TRUE(spBPQueueIsFull(NULL)==false);
 
-	SPBPQueue q = (SPBPQueue)spBPQueueCreate(3);
-	SPListElement e1 =(SPListElement) spListElementCreate(1, 1.0);
-	SPListElement e2 = (SPListElement)spListElementCreate(2, 2.0);
-	SPListElement e3 = (SPListElement)spListElementCreate(3, 3.0);
+	q = spBPQueueCreate(3);
+	e1 = spListElementCreate(1, 1.0);
+	e2 = spListElementCreate(2, 2.0);
+	e3 = spListElementCreate(3, 3.0);
 
 	ASSERT_TRUE(spBPQueueIsFull(q)==false);
 	spBPQueueEnqueue(q, e2);  //value 2.0
@@ -573,7 +643,7 @@ static bool spBPQueueIsFullTest(){    //TODO noa 14
 	ASSERT_TRUE(spBPQueueIsFull(q)==true);
 	spBPQueueDequeue(q);
 	ASSERT_TRUE(spBPQueueIsFull(q)==false);
-	spBPQueueEnqueue(q, e3);  //value 3.0
+	spBPQueueEnqueue(q, e1);  //value 1.0
 	ASSERT_TRUE(spBPQueueIsFull(q)==true);
 	spBPQueueClear(q);
 	ASSERT_TRUE(spBPQueueIsFull(q)==false);
@@ -583,6 +653,7 @@ static bool spBPQueueIsFullTest(){    //TODO noa 14
 	spListElementDestroy(e1);
 	spListElementDestroy(e2);
 	spListElementDestroy(e3);
+
 	return true;
 }
 
@@ -594,7 +665,6 @@ int main() {
 	RUN_TEST(queueCopyTest);
 	RUN_TEST(queueClearTest);
 	RUN_TEST(insertQueueWithDuplicatesTest);
-
 	RUN_TEST(dequeueTest);
 	RUN_TEST(spBPQueuePeekTest);
 	RUN_TEST(spBPQueuePeekLastTest);
@@ -605,4 +675,3 @@ int main() {
 
 	return 0;
 }
-

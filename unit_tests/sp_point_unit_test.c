@@ -2,24 +2,48 @@
 #include "unit_test_util.h"
 #include <stdbool.h>
 
+
+//checks that the point was created correctly
 bool pointBasicCreateTest() {
 	double data[2] = { 1.0, 1.0 };
-	int dim = 2;
-	int index = 1;
-	int dim2;
-	int i; //TODO noa.was inside the loop declaration
-	SPPoint p = spPointCreate(data, dim, index);
+	int dim2,dim = 2;
+	int i,index = 1;
+	SPPoint p;
+
+	p = spPointCreate(data, dim, index);
 	ASSERT_TRUE(p!=NULL);
 	dim2 = p->dim;
-	printf("%s %f %s %f %s", "first element is:", p->data[0], "the second is:", p->data[1], "\n");
 	ASSERT_TRUE(dim2==dim);
 	ASSERT_TRUE(p->index==1);
 	for ( i = 0; i < spPointGetDimension(p); i++) {
-		printf("%s %d %s %f","create p[",i,"]",spPointGetAxisCoor(p, i));  //TODO noa
-		fflush(NULL);
-		printf("\n");
-		fflush(NULL);
 		ASSERT_TRUE(spPointGetAxisCoor(p, i)==1.0);
+	}
+	spPointDestroy(p);
+	return true;
+}
+
+//checks if destroy can run on null
+bool pointBasicDestroyTest(){
+	spPointDestroy(NULL);
+	return true;
+}
+
+//checks all the getters of SPPoint
+bool pointBasicGettersTest(){
+	double data[2] = { 1.0, 2.0 };
+	int dim = 2;
+	int index = 1;
+	int i;
+	SPPoint p;
+
+	p = spPointCreate(data, dim, index);
+	ASSERT_TRUE(spPointGetDimension(p)==2);
+	ASSERT_TRUE(spPointGetDimension(p)==p->dim);
+	ASSERT_TRUE(spPointGetIndex(p)==1);
+	ASSERT_TRUE(spPointGetIndex(p)==p->index);
+	ASSERT_TRUE(spPointGetAxisCoor(p,0)==1.0);
+	for (i=0 ; i<dim ; i++){
+		ASSERT_TRUE(spPointGetAxisCoor(p,i)==data[i]);
 	}
 	spPointDestroy(p);
 	return true;
@@ -31,19 +55,13 @@ bool pointBasicCopyTest() {
 	double data[2] = { 1.0, 1.0 };
 	int dim = 2;
 	int index = 1;
-	int i; //TODO noa.was inside the loop declaration
+	int i;
 	SPPoint p = spPointCreate(data, dim, index);
 	SPPoint q = spPointCopy(p);
 	ASSERT_TRUE(spPointGetIndex(p) == spPointGetIndex(q));
 	ASSERT_TRUE(spPointGetDimension(p) == spPointGetDimension(q));
-	for ( i = 0; i < spPointGetDimension(p); i++) {
-		printf("%s %d %s %f","p[",i,"]",spPointGetAxisCoor(p, i));  //TODO noa
-		fflush(NULL);
-		printf("\n");
-		fflush(NULL);
-		printf("%s %d %s %f","q[",i,"]",spPointGetAxisCoor(q, i));
-		fflush(NULL);
-		ASSERT_TRUE(spPointGetAxisCoor(p, i+1) == spPointGetAxisCoor(q, i+1));
+	for (i = 0; i < spPointGetDimension(p); i++) {
+		ASSERT_TRUE(spPointGetAxisCoor(p, i) == spPointGetAxisCoor(q, i));
 	}
 	spPointDestroy(p);
 	spPointDestroy(q);
@@ -65,11 +83,11 @@ bool pointBasicL2Distance() {
 	spPointDestroy(q);
 	return true;
 }
-//int main() {
-//	RUN_TEST(pointBasicCreateTest);
-//	RUN_TEST(pointBasicCopyTest);
-//	RUN_TEST(pointBasicL2Distance);
-//	printf("Done"); //noa TODO
-//	fflush(NULL);
-//	return 0;
-//}
+int main() {
+	RUN_TEST(pointBasicCopyTest);
+	RUN_TEST(pointBasicL2Distance);
+	RUN_TEST(pointBasicCreateTest);
+	RUN_TEST(pointBasicDestroyTest);
+	RUN_TEST(pointBasicGettersTest);
+	return 0;
+}

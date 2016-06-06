@@ -214,4 +214,18 @@ SP_LOGGER_MSG spLoggerPrintDebug(const char* msg, const char* file,
  */
 SP_LOGGER_MSG spLoggerPrintMsg(const char* msg);
 
+/**
+ * helper function
+ * prints all the messages to stdOut
+ */
+void loggerPrint(const char* msg, const char* file,
+		const char* function, const int line);
+
+/**
+ * helper function
+ * prints to file all messages
+ */
+SP_LOGGER_MSG loggerPrintToFile(const char* msg, const char* file,
+		const char* function, const int line);
+
 #endif

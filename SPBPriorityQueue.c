@@ -1,8 +1,8 @@
 /*
  * SPBPriorityQueue.c
  *
- *  Created on: May 20, 2016
- *      Author: pshepsels
+ *  Created on: 29 áîàé 2016
+ *      Author: Noa
  */
 #include "SPBPriorityQueue.h"
 #include <stdio.h>
@@ -214,15 +214,17 @@ SP_BPQUEUE_MSG spBPQueueEnqueue(SPBPQueue source, SPListElement element)
 }
 
 
-SP_BPQUEUE_MSG spBPQueueDequeue(SPBPQueue source){  //TODO noa 8
-	SPList list = (SPList)source->list;
+SP_BPQUEUE_MSG spBPQueueDequeue(SPBPQueue source){
+	SPList list;
 	SP_LIST_MSG m;
+
+	list = (SPList)source->list;
 	if (source == NULL)			// the argument is invalid
 		{
 			return SP_BPQUEUE_INVALID_ARGUMENT;
 		}
 	spListGetFirst(list);  // list->current = spListGetFirst(list);
-	if (spBPQueueIsEmpty(source)){return SP_BPQUEUE_EMPTY;}	//TODO paz
+	if (spBPQueueIsEmpty(source)){return SP_BPQUEUE_EMPTY;}
 	m=spListRemoveCurrent(list);
 
 	switch (m){
@@ -238,69 +240,84 @@ SP_BPQUEUE_MSG spBPQueueDequeue(SPBPQueue source){  //TODO noa 8
 	return SP_BPQUEUE_SUCCESS;
 }
 
-SPListElement spBPQueuePeek(SPBPQueue source){   //TODO  noa 9  tester if it is the lowest value
-	if (source==NULL || source->list==NULL){  //TODO documantation!!!
+SPListElement spBPQueuePeek(SPBPQueue source){
+	SPList list;
+	SPListElement copy;
+
+	if (source==NULL || source->list==NULL){
 		return NULL;
 	}
-	SPList list = (SPList)source->list;
-	SPListElement copy = spListElementCopy(spListGetFirst(list));
+	list = (SPList)source->list;
+	copy = spListElementCopy(spListGetFirst(list));
 	return copy;
 }
 
-SPListElement spBPQueuePeekLast(SPBPQueue source){  //TODO  noa 10 tester if it is the highest value
+SPListElement spBPQueuePeekLast(SPBPQueue source){
+	SPListElement lastE,copy;
+
 	if (source==NULL || source->list==NULL){
 			return NULL;
 	}
-	int cnt=0;
-	SPList list = (SPList)source->list;
-	SPListElement curr = spListGetFirst(list);
-	while (cnt<spListGetSize(source->list)){ //getting the last node
-		cnt++;
-		if (cnt<spListGetSize(source->list)){
-			curr=spListGetNext(list);
-		}
-	}
-	SPListElement copy = spListElementCopy(curr);
-	return copy;  //TODO if list is empty, returning NULL??
+
+	lastE = getLastElement(source);
+	copy = spListElementCopy(lastE);
+	return copy;
 
 }
 
-double spBPQueueMinValue(SPBPQueue source){ //TODO noa 11 same as above
+
+double spBPQueueMinValue(SPBPQueue source){
+	SPList list;
+	SPListElement firstE;
+
 	if (source==NULL || source->list==NULL ){
 		return -1.0;
 	}
-	SPList list = (SPList)source->list;
-	SPListElement firstE=(SPListElement) spListGetFirst(list);
+	list = (SPList)source->list;
+	firstE=(SPListElement) spListGetFirst(list);
 	return spListElementGetValue(firstE);
 }
 
-double spBPQueueMaxValue(SPBPQueue source){ //TODO noa 12 same as above
-	if (source==NULL){
+double spBPQueueMaxValue(SPBPQueue source){
+	SPListElement lastE;
+
+	if (source==NULL || source->list==NULL){
 		return -1.0;
 	}
-	int cnt=0;
-	SPList list = (SPList)source->list;
-	SPListElement curr = spListGetFirst(list);
-	while (cnt<spListGetSize(source->list)){ //getting the last node
-		cnt++;
-		if (cnt<spListGetSize(source->list)){
-			curr=spListGetNext(list);
-		}
-	}
-//	SPListElement lastE = (SPListElement)spListElementCopy(curr);	//TODO Paz: why copy? there's memory leak here
-	return spListElementGetValue(curr);
+
+	lastE = getLastElement(source);
+
+	return spListElementGetValue(lastE);
 }
 
-bool spBPQueueIsEmpty(SPBPQueue source){  //TODO noa 13
+
+bool spBPQueueIsEmpty(SPBPQueue source){
 	if ((source!=NULL) && ((source->list)!=NULL) && ((spListGetSize(source->list))==0)){
 		return true;
 	}
 	return false;
 }
 
-bool spBPQueueIsFull(SPBPQueue source){  //TODO noa 14
+bool spBPQueueIsFull(SPBPQueue source){
 	if ((source!=NULL) && (source->list!=NULL) && (spListGetSize(source->list)==source->maxSize)){
 		return true;
 	}
 	return false;
+}
+
+
+SPListElement getLastElement(SPBPQueue source){  //auxiliary function
+	int cnt=0;
+	SPListElement curr;
+	SPList list;
+
+	list = (SPList)source->list;
+	curr = spListGetFirst(list);
+	while (cnt<spListGetSize(source->list)){ //getting the last node
+		cnt++;
+		if (cnt<spListGetSize(source->list)){
+			curr=spListGetNext(list);
+		}
+	}
+	return curr;
 }

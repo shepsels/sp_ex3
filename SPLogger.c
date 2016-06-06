@@ -50,10 +50,6 @@ void spLoggerDestroy() {
 	logger = NULL;
 }
 
-/**
- * helper function
- * prints all the messages to stdOut
- */
 void loggerPrint(const char* msg, const char* file,
 		const char* function, const int line)
 {
@@ -64,10 +60,6 @@ void loggerPrint(const char* msg, const char* file,
 	return;
 }
 
-/**
- * helper function
- * prints to file all messages
- */
 SP_LOGGER_MSG loggerPrintToFile(const char* msg, const char* file,
 		const char* function, const int line)
 {
